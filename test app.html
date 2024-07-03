@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Increment Counter Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #counter, #scale, #incrementButton, #progress-container, #congratulations, #reward {
+            display: none;
+        }
+        #counter {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        #scale {
+            font-size: 1.2em;
+            color: grey;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+        }
+        #congratulations {
+            font-size: 1.5em;
+            color: green;
+        }
+        #reward {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        a {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        #progress-container {
+            width: 80%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            margin: 20px auto;
+            height: 30px;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #4caf50;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+        #video-container {
+            display: none;
+            margin-top: 20px;
+        }
+        #video-text {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Increment Counter Game</h1>
+    <div id="instructions">
+        <p>Welcome to the Increment Counter Game!</p>
+        <p>Your goal is to reach a number with 100 zeros (a googol) by repeatedly clicking the button.</p>
+        <p>Each time you click the button, the number will double.</p>
+        <p>When you reach a googol, you'll get a special reward.</p>
+        <button onclick="startGame()">Start Game</button>
+    </div>
+    <div id="counter">1</div>
+    <div id="scale">Units</div>
+    <button id="incrementButton" onclick="incrementCounter()">Click me!</button>
+    <div id="congratulations">Congratulations for reaching 100 zeros worth of numbers!</div>
+    <div id="reward"><a id="rewardLink" onclick="playVideo()">Click here for your reward!</a></div>
+    <div id="progress-container">
+        <div id="progress-bar">0%</div>
+    </div>
+    <div id="video-container">
+        <div id="video-text">Me after successfully wasting your time:</div>
+        <iframe id="rewardVideo" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        let counter = BigInt(1); // Start with 1
+        const googol = BigInt(10) ** BigInt(100); // 10^100
+        const rewardVideoURL = "https://www.youtube.com/embed/9CwGwkAh8eI?si=vppUw80GJgLSaxUR&autoplay=1"; // Provided reward video
+        let hasReachedGoogol = false;
+
+        function startGame() {
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('counter').style.display = 'block';
+            document.getElementById('scale').style.display = 'block';
+            document.getElementById('incrementButton').style.display = 'block';
+            document.getElementById('progress-container').style.display = 'block';
+        }
+
+        function incrementCounter() {
+            counter += counter; // Increment by the current counter value
+            document.getElementById('counter').innerText = counter.toString();
+            updateScaleLabel(counter);
+
+            updateProgressBar(counter);
+
+            if (counter >= googol && !hasReachedGoogol) {
+                showCongratulations();
+                hasReachedGoogol = true;
+            }
+        }
+
+        function updateScaleLabel(value) {
+            let scale = "Units";
+            if (value < BigInt(10)) {
+                scale = "Units";
+            } else if (value < BigInt(100)) {
+                scale = "Tens";
+            } else if (value < BigInt(1000)) {
+                scale = "Hundreds";
+            } else if (value < BigInt(1e6)) {
+                scale = "Thousands";
+            } else if (value < BigInt(1e9)) {
+                scale = "Millions";
+            } else if (value < BigInt(1e12)) {
+                scale = "Billions";
+            } else if (value < BigInt(1e15)) {
+                scale = "Trillions";
+            } else if (value < BigInt(1e18)) {
+                scale = "Quadrillions";
+            } else if (value < BigInt(1e21)) {
+                scale = "Quintillions";
+            } else if (value < BigInt(1e24)) {
+                scale = "Sextillions";
+            } else if (value < BigInt(1e27)) {
+                scale = "Septillions";
+            } else if (value < BigInt(1e30)) {
+                scale = "Octillions";
+            } else if (value < BigInt(1e33)) {
+                scale = "Nonillions";
+            } else if (value < BigInt(1e36)) {
+                scale = "Decillions";
+            } else if (value < BigInt(1e39)) {
+                scale = "Undecillions";
+            } else if (value < BigInt(1e42)) {
+                scale = "Duodecillions";
+            } else if (value < BigInt(1e45)) {
+                scale = "Tredecillions";
+            } else if (value < BigInt(1e48)) {
+                scale = "Quattuordecillions";
+            } else if (value < BigInt(1e51)) {
+                scale = "Quindecillions";
+            } else if (value < BigInt(1e54)) {
+                scale = "Sexdecillions";
+            } else if (value < BigInt(1e57)) {
+                scale = "Septendecillions";
+            } else if (value < BigInt(1e60)) {
+                scale = "Octodecillions";
+            } else if (value < BigInt(1e63)) {
+                scale = "Novemdecillions";
+            } else if (value < BigInt(1e66)) {
+                scale = "Vigintillions";
+            } else {
+                scale = "Googol";
+            }
+            document.getElementById('scale').innerText = scale;
+        }
+
+        function updateProgressBar(value) {
+            const progressBar = document.getElementById('progress-bar');
+            const maxLogValue = Math.log10(Number(googol));
+            const currentLogValue = Math.log10(Number(value));
+            const percentage = Math.min(100, (currentLogValue / maxLogValue) * 100);
+            progressBar.style.width = percentage + "%";
+            progressBar.innerText = percentage.toFixed(2) + "%";
+        }
+
+        function showCongratulations() {
+            document.getElementById('counter').style.display = 'none';
+            document.getElementById('scale').style.display = 'none';
+            document.getElementById('incrementButton').style.display = 'none';
+            document.getElementById('progress-container').style.display = 'none';
+            document.getElementById('congratulations').style.display = 'block';
+            document.getElementById('reward').style.display = 'block';
+        }
+
+        function playVideo() {
+            document.getElementById('congratulations').style.display = 'none';
+            document.getElementById('reward').style.display = 'none';
+            document.getElementById('video-container').style.display = 'block';
+
+            // Set the text above the video
+            document.getElementById('video-text').innerText = "Me after successfully wasting your time:";
+
+            // Set the src attribute of the iframe to the rewardVideoURL with autoplay
+            document.getElementById('rewardVideo').src = rewardVideoURL;
+        }
+    </script>
+</body>
+</html>
